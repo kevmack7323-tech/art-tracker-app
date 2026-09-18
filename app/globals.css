@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-gallery-cream text-gallery-ink font-sans antialiased;
+}
+
+:focus-visible {
+  @apply outline outline-2 outline-offset-2 outline-gallery-burgundy;
+}

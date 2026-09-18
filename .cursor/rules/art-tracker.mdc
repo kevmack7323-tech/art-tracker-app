@@ -1,0 +1,12 @@
+---
+description: Architecture and code standards for the art tracker app
+globs: "**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+# Art Tracker standards
+
+- Use Next.js App Router pages in `app/`. Put UI in `components/`, utilities in `lib/`, and HTTP handlers in `app/api/`.
+- Keep strict TypeScript interfaces for artwork, museum, Met Museum, check-in, and gamification payloads in `lib/types.ts`. Do not pass loosely typed API JSON into the UI.
+- Follow WCAG: visible focus, labeled form controls, landmarks, skip link, image alt text, and live regions for async status.
+- Maps go through Mapbox (`NEXT_PUBLIC_MAPBOX_TOKEN`). Photo verification goes through Gemini 1.5 Flash Vision in `lib/gemini.ts`.

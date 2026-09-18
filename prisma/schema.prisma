@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  handle    String   @unique
+  displayName String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  checkIns  CheckIn[]
+  badges    UserBadge[]
+}
+
+model Museum {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  city        String
+  country     String
+  latitude    Float
+  longitude   Float
+  websiteUrl  String?
+  artworks    Artwork[]
+}
+
+model Artwork {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  title         String
+  artistName    String
+  yearCreated   String?
+  medium        String?
+  description   String
+  imageUrl      String
+  imageAlt      String
+  department    String?
+  source        String
+  sourceObjectId String?
+  museumId      String
+  museum        Museum    @relation(fields: [museumId], references: [id])
+  checkIns      CheckIn[]
+  pointsValue   Int       @default(50)
+
+  @@index([museumId])
+  @@index([title])
+}
+
+model CheckIn {
+  id             String   @id @default(cuid())
+  userId         String
+  artworkId      String
+  latitude       Float
+  longitude      Float
+  photoUrl       String?
+  verified       Boolean  @default(false)
+  verificationNote String?
+  pointsAwarded  Int      @default(0)
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id])
+  artwork        Artwork  @relation(fields: [artworkId], references: [id])
+
+  @@index([userId])
+  @@index([artworkId])
+}
+
+model Badge {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  description String
+  threshold   Int
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  badgeId   String
+  earnedAt  DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+}
